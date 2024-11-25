@@ -40,7 +40,7 @@ drug_concentrations <- gsub("mean_", "", current_colnames[grepl("mean_", current
 
 drug_concentrations <- as.numeric(drug_concentrations)
 
-control_value <- data_mean_of_means$overall_mean_0  # Extract mean_0 (control)
+control_value <- data_mean_of_means$overall_mean_0 # Extract mean_0 (control)
 cell_viability <- data_mean_of_means %>%
   select(starts_with("overall_mean")) %>%
   mutate(across(everything(), ~ . / control_value * 100)) %>%
@@ -57,8 +57,9 @@ cell_viability_sorted <- cell_viability %>%
   filter(concentration != 0) %>%
   arrange(desc(concentration))
 
-cell_viability_sorted$concentration <- factor(cell_viability_sorted$concentration, 
-                                              levels = rev(sort(unique(cell_viability_sorted$concentration))))
+cell_viability_sorted$concentration <- factor(cell_viability_sorted$concentration,
+  levels = rev(sort(unique(cell_viability_sorted$concentration)))
+)
 
 # Line chart
 ggplot(cell_viability_sorted, aes(x = concentration, y = cell_viability)) +
@@ -69,6 +70,6 @@ ggplot(cell_viability_sorted, aes(x = concentration, y = cell_viability)) +
 
 # Bar chart
 ggplot(cell_viability_sorted, aes(x = concentration, y = cell_viability)) +
-  geom_col(fill = "skyblue") +  # Using geom_col to create a bar chart
+  geom_col(fill = "skyblue") + # Using geom_col to create a bar chart
   labs(x = "Drug Concentration (µM)", y = "Cell Viability (%)", title = "Cell Viability vs Drug Concentration") +
   theme_minimal()
